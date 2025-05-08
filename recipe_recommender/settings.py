@@ -71,16 +71,23 @@ TEMPLATES = [
 WSGI_APPLICATION = 'recipe_recommender.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+from urllib.parse import urlparse
+
+DATABASE_URL = os.getenv('DATABASE_URL', 'postgresql://recipe_recommender_db_user:9NPnG3KvglD3EBLcuc3N4LOeNpRbpqmL@dpg-d0eg3rk9c44c738297g0-a.singapore-postgres.render.com/recipe_recommender_db')
+
+url = urlparse(DATABASE_URL)
+
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'recipe_recommender_db',  # Database name
+        'USER': 'recipe_recommender_db_user',  # Username
+        'PASSWORD': '9NPnG3KvglD3EBLcuc3N4LOeNpRbpqmL',  # Password
+        'HOST': 'dpg-d0eg3rk9c44c738297g0-a.singapore-postgres.render.com',  # Hostname
+        'PORT': '5432',  # Port
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

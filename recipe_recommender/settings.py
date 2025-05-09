@@ -15,21 +15,15 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure--f-w(^j2$oq)6l)30xn12fmx+fpiz(a31#^-mv=w*7ic4ca_8-'
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure--f-w(^j2$oq)6l)30xn12fmx+fpiz(a31#^-mv=w*7ic4ca_8-")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ['django-recipe-recommender.onrender.com', 'localhost', '127.0.0.1']
-
+ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -49,6 +43,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 ROOT_URLCONF = 'recipe_recommender.urls'
@@ -70,28 +65,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'recipe_recommender.wsgi.application'
 
-
-from urllib.parse import urlparse
-
-DATABASE_URL = os.getenv('DATABASE_URL', 'postgresql://recipe_recommender_db_user:9NPnG3KvglD3EBLcuc3N4LOeNpRbpqmL@dpg-d0eg3rk9c44c738297g0-a.singapore-postgres.render.com/recipe_recommender_db')
-
-url = urlparse(DATABASE_URL)
-
-
+# Database configuration for Render (for SQLite or PostgreSQL)
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'recipe_recommender_db',  # Database name
-        'USER': 'recipe_recommender_db_user',  # Username
-        'PASSWORD': '9NPnG3KvglD3EBLcuc3N4LOeNpRbpqmL',  # Password
-        'HOST': 'dpg-d0eg3rk9c44c738297g0-a.singapore-postgres.render.com',  # Hostname
-        'PORT': '5432',  # Port
+        'ENGINE': 'django.db.backends.sqlite3',  # Default to SQLite for testing
+        'NAME': BASE_DIR / 'db.sqlite3',  # Use SQLite for simplicity (or configure PostgreSQL later)
     }
 }
 
 # Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -107,40 +89,33 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # For static file collection during production
 
-STATIC_URL = 'static/'
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
+# Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Security settings (optional, for production)
+SECURE_SSL_REDIRECT = False  # Disable SSL redirection in development
+SESSION_COOKIE_SECURE = False  # Disable secure cookies in development
+CSRF_COOKIE_SECURE = False  # Disable secure CSRF cookies in development
 
-# Edamam API keys
-EDAMAM_API_ID = 'df258bb8'  # Replace with your actual API ID
-EDAMAM_API_KEY = '1c09fd7c2f536630fd1f6ce96230150d'  # Replace with your actual API Key
-
+# Login settings
 LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/home/' 
+LOGIN_REDIRECT_URL = '/home/'
 
-import warnings
+# Default primary key field type
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-warnings.filterwarnings("ignore", category=DeprecationWarning)
+# Razorpay keys (replace with your own keys later)
+RAZORPAY_API_KEY = os.getenv("RAZORPAY_API_KEY", "your-razorpay-api-key")
+RAZORPAY_SECRET_KEY = os.getenv("RAZORPAY_SECRET_KEY", "your-razorpay-secret-key")
+

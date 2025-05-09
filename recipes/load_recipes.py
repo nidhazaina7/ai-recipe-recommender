@@ -16,7 +16,7 @@ from recipes.models import Recipe
 def load_huggingface_recipes():
     dataset = load_dataset("corbt/all-recipes", split="train")
 
-    for item in dataset.select(range(100)):  # Limit to first 100 recipes
+    for item in dataset.select(range(100)):  
         raw = item['input']
         
         # Extract title (first line)

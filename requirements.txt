@@ -26,6 +26,8 @@ packaging==25.0
 pandas==2.2.3
 pillow==11.2.1
 propcache==0.3.1
+psycopg2==2.9.10
+psycopg2-binary==2.9.10
 pyarrow==20.0.0
 python-dateutil==2.9.0.post0
 pytz==2025.2
